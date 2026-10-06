@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: fintrack-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: fintrack_db
+      MYSQL_ROOT_PASSWORD: fintrack_dev_password
+    ports:
+      - "3308:3306"
+    volumes:
+      - fintrack_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pfintrack_dev_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fintrack-api
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__DefaultConnection: server=mysql;port=3306;database=fintrack_db;user=root;password=fintrack_dev_password
+      Jwt__Key: FinTrack-Docker-Development-Key-2026-Minimum-32-Characters-Long
+      Jwt__Issuer: FinTrack
+      Jwt__Audience: FinTrackUsers
+      Jwt__ExpiryMinutes: 60
+    ports:
+      - "8081:8080"
+
+volumes:
+  fintrack_mysql_data:

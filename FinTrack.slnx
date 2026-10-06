@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/FinTrack.Api/FinTrack.Api.csproj" />
+    <Project Path="backend/FinTrack.Application/FinTrack.Application.csproj" />
+    <Project Path="backend/FinTrack.Domain/FinTrack.Domain.csproj" />
+    <Project Path="backend/FinTrack.Infrastructure/FinTrack.Infrastructure.csproj" />
+    <Project Path="backend/FinTrack.Tests/FinTrack.Tests.csproj" />
+  </Folder>
+</Solution>
