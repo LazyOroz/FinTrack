@@ -1,732 +1,532 @@
-\# FinTrack
+<div align="center">
 
+# 💰 FinTrack
 
+### Personal Finance Management REST API
 
-FinTrack is a personal finance management REST API built with ASP.NET Core and MySQL.
+A backend-focused personal finance platform built with **ASP.NET Core, Entity Framework Core, MySQL, JWT Authentication and Docker**.
 
+Designed to demonstrate real-world backend development: authentication, financial business logic, relational data modeling, background processing, testing and containerization.
 
+</div>
 
-The project provides secure user authentication, account and transaction management, budgeting, account-to-account transfers, financial summaries, and automatic recurring transaction processing.
+---
 
+## ✨ Features
 
+- 🔐 JWT authentication and authorization
+- 🔑 Secure password hashing with BCrypt
+- 👤 User registration and login
+- 💳 Multiple financial accounts
+- 💵 Income and expense tracking
+- 🏷️ Transaction categories
+- 🔄 Account-to-account transfers
+- 📊 Monthly budget tracking
+- 📈 Financial dashboard summary
+- ⏰ Recurring transactions
+- ⚙️ Background transaction processing
+- 🗄️ Automatic EF Core database migrations
+- 📖 Swagger / OpenAPI documentation
+- 🐳 Dockerized API and MySQL database
+- 🧪 Automated tests with xUnit
 
-It was built as a backend portfolio project with a focus on clean project separation, financial business logic, authentication, persistence, background processing, testing, and containerized deployment.
+---
 
+## 🛠️ Tech Stack
 
+| Technology | Usage |
+|---|---|
+| **C# / .NET 10** | Main backend platform |
+| **ASP.NET Core Web API** | REST API |
+| **Entity Framework Core 10** | ORM and database access |
+| **MySQL 8** | Relational database |
+| **JWT Bearer** | Authentication and authorization |
+| **BCrypt** | Password hashing |
+| **Swagger / OpenAPI** | API documentation |
+| **Docker** | Containerization |
+| **Docker Compose** | API + database orchestration |
+| **xUnit** | Automated testing |
+| **EF Core InMemory** | Test database |
 
-\## Features
+---
 
+## 🏗️ Architecture
 
-
-\- JWT authentication and authorization
-
-\- User registration and login
-
-\- BCrypt password hashing
-
-\- Personal financial accounts
-
-\- Income and expense tracking
-
-\- Transaction categories
-
-\- Account-to-account transfers
-
-\- Monthly budgets with automatic spending calculations
-
-\- Dashboard financial summary
-
-\- Recurring income and expense transactions
-
-\- Background processing with `BackgroundService`
-
-\- Automatic EF Core database migrations
-
-\- Swagger / OpenAPI documentation
-
-\- Dockerized API and MySQL database
-
-\- Automated tests with xUnit and EF Core InMemory
-
-
-
-\## Tech Stack
-
-
-
-\- C#
-
-\- .NET 10
-
-\- ASP.NET Core Web API
-
-\- Entity Framework Core 10
-
-\- MySQL 8
-
-\- JWT Bearer Authentication
-
-\- BCrypt
-
-\- Swagger / OpenAPI
-
-\- Docker
-
-\- Docker Compose
-
-\- xUnit
-
-
-
-\## Architecture
-
-
-
-FinTrack is divided into separate projects:
-
-
+The solution is separated into multiple projects to keep responsibilities isolated:
 
 ```text
-
-FinTrack
-
-|
-
-|-- backend
-
-|   |-- FinTrack.Api
-
-|   |-- FinTrack.Application
-
-|   |-- FinTrack.Domain
-
-|   |-- FinTrack.Infrastructure
-
-|   `-- FinTrack.Tests
-
-|
-
-|-- Dockerfile
-
-|-- docker-compose.yml
-
-|-- .dockerignore
-
-|-- .gitignore
-
-`-- FinTrack.slnx
-
+FinTrack/
+│
+├── backend/
+│   ├── FinTrack.Api/
+│   │   └── Controllers/
+│   │
+│   ├── FinTrack.Application/
+│   │   ├── Accounts/
+│   │   ├── Auth/
+│   │   ├── Budgets/
+│   │   ├── Categories/
+│   │   ├── Dashboard/
+│   │   ├── RecurringTransactions/
+│   │   └── Transactions/
+│   │
+│   ├── FinTrack.Domain/
+│   │   ├── Entities/
+│   │   └── Enums/
+│   │
+│   ├── FinTrack.Infrastructure/
+│   │   ├── BackgroundServices/
+│   │   ├── Persistence/
+│   │   └── Services/
+│   │
+│   └── FinTrack.Tests/
+│       └── Transactions/
+│
+├── Dockerfile
+├── docker-compose.yml
+├── .dockerignore
+├── .gitignore
+└── FinTrack.slnx
 ```
 
+### `FinTrack.Api`
 
+Presentation layer responsible for:
 
-\### FinTrack.Api
+- REST controllers
+- JWT configuration
+- Swagger configuration
+- dependency injection
+- application startup
+- automatic database migration execution
 
+### `FinTrack.Application`
 
+Contains request/response models, application contracts and DTOs for:
 
-The presentation layer of the application.
+- Authentication
+- Accounts
+- Categories
+- Transactions
+- Transfers
+- Budgets
+- Dashboard
+- Recurring transactions
 
+### `FinTrack.Domain`
 
-
-Contains:
-
-
-
-\- REST API controllers
-
-\- JWT authentication configuration
-
-\- Swagger configuration
-
-\- dependency injection
-
-\- application startup
-
-\- automatic database migration execution
-
-
-
-\### FinTrack.Application
-
-
-
-Contains application contracts and DTOs for:
-
-
-
-\- authentication
-
-\- accounts
-
-\- categories
-
-\- transactions
-
-\- transfers
-
-\- budgets
-
-\- dashboard
-
-\- recurring transactions
-
-
-
-\### FinTrack.Domain
-
-
-
-Contains the core domain models and enums.
-
-
+Contains the core domain entities and enums.
 
 Main entities:
 
+- `User`
+- `Account`
+- `Transaction`
+- `Category`
+- `Budget`
+- `RecurringTransaction`
 
+### `FinTrack.Infrastructure`
 
-\- User
+Handles infrastructure concerns:
 
-\- Account
+- Entity Framework Core
+- MySQL persistence
+- EF Core migrations
+- Authentication service
+- JWT generation
+- BCrypt password verification
+- Recurring transaction background worker
 
-\- Transaction
+### `FinTrack.Tests`
 
-\- Category
+Contains automated tests for core financial transaction logic using **xUnit** and **EF Core InMemory**.
 
-\- Budget
+---
 
-\- RecurringTransaction
+## 🔌 API Endpoints
 
+### Authentication
 
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/register` | Register a new user |
+| `POST` | `/api/auth/login` | Login and receive JWT |
 
-\### FinTrack.Infrastructure
+### Accounts
 
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/accounts` | Get user accounts |
+| `GET` | `/api/accounts/{id}` | Get account by ID |
+| `POST` | `/api/accounts` | Create account |
+| `PUT` | `/api/accounts/{id}` | Update account |
+| `DELETE` | `/api/accounts/{id}` | Delete account |
 
+### Categories
 
-Handles infrastructure concerns including:
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/categories` | Get categories |
+| `POST` | `/api/categories` | Create category |
+| `DELETE` | `/api/categories/{id}` | Delete category |
 
+### Transactions
 
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/transactions` | Get transaction history |
+| `POST` | `/api/transactions` | Create income or expense |
+| `POST` | `/api/transactions/transfer` | Transfer money between accounts |
 
-\- Entity Framework Core
+### Budgets
 
-\- MySQL persistence
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/budgets` | Get budgets |
+| `GET` | `/api/budgets/{id}` | Get budget by ID |
+| `POST` | `/api/budgets` | Create budget |
+| `PUT` | `/api/budgets/{id}` | Update budget |
+| `DELETE` | `/api/budgets/{id}` | Delete budget |
 
-\- database migrations
+### Recurring Transactions
 
-\- authentication service
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/recurring-transactions` | Get recurring transactions |
+| `GET` | `/api/recurring-transactions/{id}` | Get recurring transaction |
+| `POST` | `/api/recurring-transactions` | Create recurring transaction |
+| `PUT` | `/api/recurring-transactions/{id}` | Update recurring transaction |
+| `DELETE` | `/api/recurring-transactions/{id}` | Delete recurring transaction |
 
-\- JWT generation
+### Dashboard
 
-\- BCrypt password verification
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/dashboard/summary` | Get financial summary |
 
-\- recurring transaction background worker
+---
 
+## 💸 Financial Business Logic
 
+FinTrack implements financial logic beyond standard CRUD operations.
 
-\### FinTrack.Tests
+### Income
 
+Income transactions automatically increase the selected account balance.
 
+### Expenses
 
-Contains automated tests for financial transaction logic using xUnit and EF Core InMemory.
+Expense transactions decrease the account balance.
 
+Transactions are rejected when the account does not contain sufficient funds.
 
+### Account Transfers
 
-\## API
+Transfers are processed atomically between two accounts.
 
+Before completing a transfer, FinTrack:
 
+1. Verifies ownership of both accounts.
+2. Validates the transfer amount.
+3. Checks the source account balance.
+4. Ensures both accounts use the same currency.
+5. Decreases the source account balance.
+6. Increases the destination account balance.
+7. Creates transaction records representing both sides of the transfer.
 
-\### Authentication
+This ensures the total balance remains consistent during internal transfers.
 
+---
 
+## 📊 Budget Tracking
+
+Users can define monthly spending limits for expense categories.
+
+For every budget, FinTrack dynamically calculates:
 
 ```text
-
-POST /api/auth/register
-
-POST /api/auth/login
-
+Limit Amount
+Spent Amount
+Remaining Amount
+Percentage Used
 ```
 
+Spending is calculated from actual expense transactions instead of being manually stored.
 
+---
 
-\### Accounts
+## ⏰ Recurring Transactions
 
+FinTrack supports automatic recurring income and expense transactions.
 
+Supported recurrence intervals:
+
+- Daily
+- Weekly
+- Monthly
+- Yearly
+
+A hosted `.NET BackgroundService` periodically checks for transactions that are ready to execute.
+
+When a recurring transaction becomes due, the worker:
 
 ```text
-
-GET    /api/accounts
-
-GET    /api/accounts/{id}
-
-POST   /api/accounts
-
-PUT    /api/accounts/{id}
-
-DELETE /api/accounts/{id}
-
+Recurring transaction becomes due
+              │
+              ▼
+     Validate account
+              │
+              ▼
+       Update balance
+              │
+              ▼
+     Create transaction
+              │
+              ▼
+Calculate next execution date
 ```
 
+This allows operations such as salaries, subscriptions and recurring expenses to be processed automatically.
 
+---
 
-\### Categories
+## 🔐 Authentication & Security
 
+FinTrack uses **JWT Bearer Authentication**.
 
+After successful login, the API returns a JWT:
 
-```text
-
-GET    /api/categories
-
-POST   /api/categories
-
-DELETE /api/categories/{id}
-
-```
-
-
-
-\### Transactions
-
-
-
-```text
-
-GET  /api/transactions
-
-POST /api/transactions
-
-POST /api/transactions/transfer
-
-```
-
-
-
-\### Budgets
-
-
-
-```text
-
-GET    /api/budgets
-
-GET    /api/budgets/{id}
-
-POST   /api/budgets
-
-PUT    /api/budgets/{id}
-
-DELETE /api/budgets/{id}
-
-```
-
-
-
-\### Recurring Transactions
-
-
-
-```text
-
-GET    /api/recurring-transactions
-
-GET    /api/recurring-transactions/{id}
-
-POST   /api/recurring-transactions
-
-PUT    /api/recurring-transactions/{id}
-
-DELETE /api/recurring-transactions/{id}
-
-```
-
-
-
-\### Dashboard
-
-
-
-```text
-
-GET /api/dashboard/summary
-
-```
-
-
-
-\## Financial Logic
-
-
-
-FinTrack contains business logic beyond standard CRUD operations.
-
-
-
-\### Income
-
-
-
-Income transactions increase the selected account balance.
-
-
-
-\### Expenses
-
-
-
-Expense transactions decrease the account balance and are rejected when the account has insufficient funds.
-
-
-
-\### Transfers
-
-
-
-Transfers are performed atomically between two accounts.
-
-
-
-A transfer:
-
-
-
-1\. validates ownership of both accounts
-
-2\. validates sufficient funds
-
-3\. validates matching currencies
-
-4\. decreases the source account balance
-
-5\. increases the destination account balance
-
-6\. records both sides of the transfer
-
-
-
-\### Budgets
-
-
-
-Budgets are assigned to expense categories for a specific month and year.
-
-
-
-FinTrack dynamically calculates:
-
-
-
-\- amount spent
-
-\- remaining budget
-
-\- percentage used
-
-
-
-\### Recurring Transactions
-
-
-
-Recurring transactions can execute automatically according to a schedule:
-
-
-
-\- Daily
-
-\- Weekly
-
-\- Monthly
-
-\- Yearly
-
-
-
-A hosted background service periodically checks for due recurring transactions, updates account balances, creates transaction records, and schedules the next execution.
-
-
-
-\## Authentication
-
-
-
-Protected endpoints use JWT Bearer authentication.
-
-
-
-Passwords are never stored directly. Password hashes are generated and verified using BCrypt.
-
-
-
-After logging in, use the returned JWT token:
-
-
-
-```text
-
+```http
 Authorization: Bearer <token>
-
 ```
 
+Protected resources are scoped to the authenticated user.
 
+Security measures include:
 
-Swagger also provides an \*\*Authorize\*\* button for testing protected endpoints.
+- BCrypt password hashing
+- JWT authentication
+- user-scoped accounts
+- account ownership validation
+- category ownership validation
+- insufficient-funds validation
+- secrets separated from source-controlled configuration
 
+Passwords are never stored in plain text.
 
+---
 
-\## Running with Docker
+## 🐳 Running with Docker
 
+### Requirements
 
+You only need:
 
-\### Requirements
+- Docker
+- Docker Compose
 
-
-
-\- Docker
-
-\- Docker Compose
-
-
-
-Clone the repository and run:
-
-
+Clone the repository:
 
 ```bash
-
-docker compose up --build
-
+git clone https://github.com/LazyOroz/FinTrack.git
+cd FinTrack
 ```
 
+Start the complete application:
 
+```bash
+docker compose up --build
+```
 
 Docker Compose starts:
 
+```text
+┌─────────────────────┐
+│    FinTrack API     │
+│      :8081          │
+└──────────┬──────────┘
+           │
+           │ EF Core
+           ▼
+┌─────────────────────┐
+│      MySQL 8        │
+│      :3308          │
+└─────────────────────┘
+```
 
+Database migrations are automatically applied when the API starts.
 
-\- FinTrack API
+### Swagger
 
-\- MySQL 8 database
-
-
-
-EF Core migrations are automatically applied when the API starts.
-
-
-
-Swagger is available at:
-
-
+After startup, open:
 
 ```text
-
 http://localhost:8081/swagger
-
 ```
 
-
-
-The MySQL container is exposed locally on port `3308`.
-
-
-
-To stop the application:
-
-
+### Stop containers
 
 ```bash
-
 docker compose down
-
 ```
 
-
-
-To stop the application and remove the database volume:
-
-
+To also delete the database volume:
 
 ```bash
-
 docker compose down -v
-
 ```
 
-
-
+> [!WARNING]
 > `docker compose down -v` permanently removes the Docker database volume and its stored data.
 
+---
 
+## 💻 Running Locally
 
-\## Running Locally
+### Requirements
 
+- .NET 10 SDK
+- MySQL 8
 
+For local development, sensitive configuration should be stored with **.NET User Secrets**.
 
-\### Requirements
-
-
-
-\- .NET 10 SDK
-
-\- MySQL 8
-
-
-
-Configure the connection string and JWT key using .NET User Secrets:
-
-
+### Connection String
 
 ```bash
-
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "server=localhost;port=3306;database=fintrack\_db;user=root;password=YOUR\_PASSWORD" --project backend/FinTrack.Api
-
-
-
-dotnet user-secrets set "Jwt:Key" "YOUR\_SECURE\_JWT\_KEY\_AT\_LEAST\_32\_CHARACTERS\_LONG" --project backend/FinTrack.Api
-
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "server=localhost;port=3306;database=fintrack_db;user=root;password=YOUR_PASSWORD" --project backend/FinTrack.Api
 ```
 
-
-
-Then run:
-
-
+### JWT Secret
 
 ```bash
+dotnet user-secrets set "Jwt:Key" "YOUR_SECURE_JWT_KEY_AT_LEAST_32_CHARACTERS_LONG" --project backend/FinTrack.Api
+```
 
+Run the API:
+
+```bash
 dotnet run --project backend/FinTrack.Api
-
 ```
 
+---
 
+## 🗄️ Database
 
-\## Database Migrations
+FinTrack uses **MySQL 8** with **Entity Framework Core**.
 
+Main tables:
 
-
-Create a new migration:
-
-
-
-```bash
-
-dotnet ef migrations add MigrationName \\
-
-&#x20; --project backend/FinTrack.Infrastructure \\
-
-&#x20; --startup-project backend/FinTrack.Api \\
-
-&#x20; --output-dir Persistence/Migrations
-
+```text
+Users
+Accounts
+Categories
+Transactions
+Budgets
+RecurringTransactions
 ```
 
-
-
-Apply migrations manually:
-
-
+### Create a Migration
 
 ```bash
-
-dotnet ef database update \\
-
-&#x20; --project backend/FinTrack.Infrastructure \\
-
-&#x20; --startup-project backend/FinTrack.Api
-
+dotnet ef migrations add MigrationName --project backend/FinTrack.Infrastructure --startup-project backend/FinTrack.Api --output-dir Persistence/Migrations
 ```
 
-
-
-When running through Docker, existing migrations are automatically applied during API startup.
-
-
-
-\## Tests
-
-
-
-Run all tests with:
-
-
+### Apply Migrations
 
 ```bash
+dotnet ef database update --project backend/FinTrack.Infrastructure --startup-project backend/FinTrack.Api
+```
 
+When using Docker, existing migrations are automatically applied during API startup.
+
+---
+
+## 🧪 Tests
+
+FinTrack includes automated tests for core financial logic.
+
+Run:
+
+```bash
 dotnet test
-
 ```
 
+Current test scenarios:
 
+| Test | Purpose |
+|---|---|
+| Income | Verifies that income increases account balance |
+| Expense | Verifies that expenses decrease account balance |
+| Insufficient funds | Prevents invalid expense processing |
+| Transfer | Verifies money movement between accounts |
 
-The current test suite covers core transaction scenarios including:
+Current test suite:
 
+```text
+Total tests: 4
+Passed:      4
+Failed:      0
+```
 
+---
 
-\- income balance updates
+## 📖 Swagger
 
-\- expense balance updates
+Swagger / OpenAPI is included for exploring and testing the API.
 
-\- insufficient balance protection
+The complete authentication flow can be tested directly from Swagger:
 
-\- transfers between accounts
+```text
+Register
+   ↓
+Login
+   ↓
+Receive JWT
+   ↓
+Authorize
+   ↓
+Access protected endpoints
+```
 
+When running with Docker:
 
+```text
+http://localhost:8081/swagger
+```
 
-\## Security
+---
 
+## 🚀 Future Improvements
 
+Planned and possible improvements:
 
-FinTrack includes:
+- React frontend
+- Refresh tokens
+- Integration tests
+- Transaction filtering
+- Pagination
+- Multi-currency conversion
+- Financial reports and charts
+- CI/CD with GitHub Actions
+- Cloud deployment
 
+---
 
+## 👨‍💻 Author
 
-\- JWT Bearer authentication
+**Orozobek Israilov**
 
-\- BCrypt password hashing
+Backend / Full-Stack Developer
 
-\- user-scoped financial data
+GitHub: [@LazyOroz](https://github.com/LazyOroz)
 
-\- account ownership validation
+---
 
-\- category ownership validation
+<div align="center">
 
-\- insufficient-funds validation
+Built with **C# · ASP.NET Core · MySQL · Docker**
 
-\- secrets separated from source-controlled configuration
+⭐ If you find this project useful, consider giving it a star.
 
-
-
-Local development secrets should be stored using .NET User Secrets or environment variables and should never be committed to the repository.
-
-
-
-\## Future Improvements
-
-
-
-Possible future improvements include:
-
-
-
-\- React frontend
-
-\- refresh tokens
-
-\- integration tests
-
-\- transaction filtering and pagination
-
-\- multi-currency conversion
-
-\- reporting and charts
-
-\- CI/CD pipeline
-
-\- cloud deployment
-
-
-
-\## License
-
-
-
-This project is intended for educational and portfolio purposes.
-
+</div>
